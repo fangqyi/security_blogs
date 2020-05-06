@@ -10,7 +10,7 @@ It often adjusts timing by implementing a queue/FIFO algorithm in memory, simult
 
 ![Memory-Layout](https://media.geeksforgeeks.org/wp-content/uploads/memoryLayoutC.jpg)
 
-<div align="center">credits:[GreeksforGreeks](https://www.geeksforgeeks.org/memory-layout-of-c-program/)
+<div align="center">credits:[GreeksforGreeks](https://www.geeksforgeeks.org/memory-layout-of-c-program/) <div>
 
 ##### Text/code segment:
 
