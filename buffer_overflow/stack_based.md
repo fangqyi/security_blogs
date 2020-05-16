@@ -1,6 +1,6 @@
-## Stack-based Buffer Overflow
+## Stack
 
-#### Stack
+#### Intro to Stack:
 
 - LIFO
 - consists of frames which are pushed when a function is called and popped when a function is finished
@@ -36,13 +36,15 @@ ESP and EBP are almost exclusively used to manage the entry and exit to a proced
 
 EBX ESI and EDI must be preserved; EAX ECX and EDX can be freely modifies within the procedure that is using them.
 
-Although functions can access local variables by the offsets of ESP, a better practice would be to use a frame pointer that saves the current address of the stack to the EBP register. Fuctions can reference their local variables by using the offsets of EBP without worrying about clobbering the stack.
+Although functions can access local variables by the offsets of ESP, a better practice would be to use a frame pointer that saves the current address of the stack to the EBP register. Functions can reference their local variables by using the offsets of EBP without worrying about clobbering the stack.
 
 #### Basics in Assembly Language
 
 - registers are not case-sensitive 
 
-##### move (Opcodes: 88, 89, 8A, ...): 
+##### Data Movement Instructions:
+
+###### move (Opcodes: 88, 89, 8A, ...): 
 
 - copies the data item referred to by its first operand into the location referred to by its second operand
 
@@ -65,7 +67,7 @@ Although functions can access local variables by the offsets of ESP, a better pr
   mov ds, dx			;move the contents of dx into segment register ds
   ```
 
-##### push (Opcodes: FF, 89, 8A, 8B, ...):
+###### push (Opcodes: FF, 89, 8A, 8B, ...):
 
 - places its operand onto the top of the hardware supported stack in memory
 
@@ -82,9 +84,9 @@ Although functions can access local variables by the offsets of ESP, a better pr
   push [var] 	;push the 4 bytes at address var onto the stack
   ```
 
-##### pop 
+###### pop 
 
-- removes the 4-byte data element frm the top of the hardware-supported stack into the specified operand (i.e. register or memory location)
+- removes the 4-byte data element from the top of the hardware-supported stack into the specified operand (i.e. register or memory location)
 
 - first moves the 4 bytes located at memory location [esp] into the specified register or memory location, and then increments esp by 4
 
@@ -98,7 +100,7 @@ Although functions can access local variables by the offsets of ESP, a better pr
   pop [ebx]	;pop the top element of the stack into memory at the four bytes starting at location EBX. 
   ```
 
-##### call
+###### call
 
 - a subroutine call
 - first pushes the current code location onto the hardware supported stack in memory, and then preforms an unconditional jump to the code location indicated by the label operand
@@ -108,13 +110,41 @@ Although functions can access local variables by the offsets of ESP, a better pr
   call <label>
   ```
 
-##### ret
+###### ret
 
 - pops a code location off the hardware supported in-memory stack, and then performs an unconditional jump to the retrieved code location
 
 - ```assembly
   ret
   ```
+
+##### Arithmetic and Logic Instructions
+
+###### add - Integer Addition:
+
+- adds together its two operands, storing the result in its first operand
+
+##### Control Flow Instructions
+
+The x86 processor maintains an instruction pointer (IP) register that is a 32-bit value indicating the location in memory where the current instruction starts. In most cases, it increments to point to the next instruction in memory begins after execution an instruction. It can be manipulated by the control flow instructions.
+
+- the notation <label> is used to refer to labeled locations in the program text.
+
+  ```assembly
+  	   mov esi, [ebp+8]
+  begin: xor ecx, ecx
+  	   mov eax, [esi]
+  ```
+
+###### jmp - Jump:
+
+- Transfers program control flow to the instruction at the memory location indicated by the operand.
+
+- ```assembly
+  jmp <label>
+  ```
+
+- 
 
 #### Stack Usage:
 
@@ -185,24 +215,11 @@ END
 <div align="center">Stack during subroutine call </div>
 <div align="center">credits:[x86 Assembly Guide](https://www.cs.virginia.edu/~evans/cs216/guides/x86.html) </div>
 
-#### Stack Based Buffer Overflows:
-
-- affects any functions that copies input to memory without bounds checking
-  - strcpy()
-  - memcpy()
-  - gets()
-  - etc
-
-- overflow: when the source data size is larger than the destination buffer size, it overflows the buffer towards higher memory address and overwrites previous data on the stack (as the stack grows towards lower address)
-
-#### Attempts to mitigate exploits on buffer overflow:
-
-- stack canaries
-- Address Space Layout Randomization 
-
 Links:
 
 [Stack-based memory allocation](https://en.wikipedia.org/wiki/Stack-based_memory_allocation)
+
+[What Is a Buffer Overflow](https://www.acunetix.com/blog/web-security-zone/what-is-buffer-overflow/)
 
 [Understanding & Exploiting stack-based Buffer Overflows](https://medium.com/@sghosh2402/understanding-exploiting-stack-based-buffer-overflows-acf9b8659cba)
 
